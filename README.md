@@ -1,11 +1,11 @@
-# Week 2 — Steel Industry Energy Consumption: EDA & Baseline Regression Modeling
+# Steel Industry Energy Consumption: EDA & Baseline Regression Modeling
 
 ## Project Overview
 
 This project analyzes real energy consumption data from a steel manufacturing plant and builds a baseline regression pipeline to predict `Usage_kWh`. The work is split into two notebooks that together represent the core workflow of a real machine learning project:
 
-1. **`week2_eda.ipynb`** — Deep exploratory data analysis and feature engineering.
-2. **`week2_baseline_models.ipynb`** — Baseline regression modeling, evaluation, and model selection.
+1. **`eda.ipynb`** — Deep exploratory data analysis and feature engineering.
+2. **`Baseline_models.ipynb`** — Baseline regression modeling, evaluation, and model selection.
 
 ## Dataset Information
 
@@ -15,7 +15,7 @@ This project analyzes real energy consumption data from a steel manufacturing pl
 - **Original columns (11):** `date`, `Usage_kWh`, `Lagging_Current_Reactive.Power_kVarh`, `Leading_Current_Reactive_Power_kVarh`, `CO2(tCO2)`, `Lagging_Current_Power_Factor`, `Leading_Current_Power_Factor`, `NSM`, `WeekStatus`, `Day_of_week`, `Load_Type`
 - **Target variable:** `Usage_kWh` (industrial energy consumption)
 
-The raw data file is provided at `data/Steel_industry_data.csv`. The engineered version produced by Part 1 (`data/steel_engineered.csv`) is used as the input to Part 2.
+The raw data file is provided at `data/Steel_industry_data.csv`. The engineered version produced by Part 1 (`data/steel_industry_data_modified.csv`) is used as the input to Part 2.
 
 ## Environment Setup
 
@@ -35,11 +35,11 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-Then open `week2_eda.ipynb` first (it generates `data/steel_engineered.csv`), followed by `week2_baseline_models.ipynb`.
+Then open `eda.ipynb` first (it generates `data/steel_industry_data_modified.csv`), followed by `Baseline_models.ipynb`.
 
 ## Feature Engineering Steps
 
-Performed in `week2_eda.ipynb`:
+Performed in `eda.ipynb`:
 
 | Feature | Description |
 |---|---|
@@ -58,7 +58,7 @@ Performed in `week2_eda.ipynb`:
 
 ## Model Training Process
 
-Performed in `week2_baseline_models.ipynb`:
+Performed in `Baseline_models.ipynb`:
 
 1. Loaded the engineered dataset from Part 1.
 2. Dropped `date`, `High_Usage_Flag` (target leakage — directly derived from `Usage_kWh`), and `WeekStatus` (redundant with `Is_Weekend`).
@@ -77,40 +77,17 @@ Performed in `week2_baseline_models.ipynb`:
 | Decision Tree | 0.55 | 1.64 | 0.998 | 2.59 ± 2.14 |
 | **Random Forest** | **0.35** | **1.04** | **0.999** | **2.21 ± 2.28** |
 
-**Best model: Random Forest Regressor**, with the lowest test RMSE (1.04 kWh), lowest mean CV RMSE (2.21 kWh), and highest R² (0.999). Tree-based models substantially outperform the linear models, indicating the relationship between the features and `Usage_kWh` is non-linear (e.g. threshold-like jumps between load states). Random Forest is the model carried forward as the baseline for future tuning. Full overfitting analysis and reasoning are documented in the Model Selection section of `week2_baseline_models.ipynb`.
-
-## Screenshots
-
-**Correlation Heatmap**
-
-![Correlation Heatmap](figs/correlation_heatmap.png)
-
-**Average Usage by Load Type**
-
-![Average Usage by Load Type](figs/bar_load_type.png)
-
-**Average Usage by Hour of Day**
-
-![Average Usage by Hour of Day](figs/line_hourly_usage.png)
-
-**Test RMSE Comparison Across Models**
-
-![RMSE Comparison](figs/rmse_comparison.png)
-
-**Predicted vs Actual (Best Model — Random Forest)**
-
-![Predicted vs Actual](figs/pred_vs_actual.png)
+**Best model: Random Forest Regressor**, with the lowest test RMSE (1.04 kWh), lowest mean CV RMSE (2.21 kWh), and highest R² (0.999). Tree-based models substantially outperform the linear models, indicating the relationship between the features and `Usage_kWh` is non-linear (e.g. threshold-like jumps between load states). Random Forest is the model carried forward as the baseline for future tuning. Full overfitting analysis and reasoning are documented in the Model Selection section of `Baseline_models.ipynb`.
 
 ## Repository Structure
 
 ```
 .
-├── week2_eda.ipynb              # Part 1: EDA & feature engineering
-├── week2_baseline_models.ipynb  # Part 2: Baseline regression modeling
+├── eda.ipynb              # Part 1: EDA & feature engineering
+├── Baseline_models.ipynb  # Part 2: Baseline regression modeling
 ├── data/
 │   ├── Steel_industry_data.csv  # Raw dataset
-│   └── steel_engineered.csv     # Output of Part 1, input to Part 2
-├── figs/                        # Saved chart images (used in README + notebooks)
+│   └── steel_industry_data_modified.csv     # Output of Part 1, input to Part 2
 ├── README.md
 └── requirements.txt
 ```
